@@ -1,3 +1,5 @@
+using MyGameTrackr.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,8 +16,8 @@ builder.Services.AddHttpClient("GetGameDetails", x =>
     x.BaseAddress = new Uri("https://api.rawg.io/api/games/");
 });
 
-
-
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<ISearchGames,SearchGames>();
 
 
 

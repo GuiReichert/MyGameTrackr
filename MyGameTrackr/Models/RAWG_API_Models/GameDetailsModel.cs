@@ -9,14 +9,17 @@
         public string name_original { get; set; }
         public string description { get; set; }
         public string website { get; set; }
-        public Platform[] platforms { get; set; }
+        public Parent_Platforms[] parent_platforms { get; set; }
         public Store[] stores { get; set; }
         public Developer[] developers { get; set; }
         public Genre[] genres { get; set; }
-        public Tag[] tags { get; set; }
         public string description_raw { get; set; }
     }
 
+    public class Parent_Platforms
+    {
+        public Platform platform { get; set; }
+    }
 
     public class Platform
     {
@@ -24,7 +27,13 @@
     }
     public class Store
     {
+        public Store1 store { get; set; }
+    }
+
+    public class Store1
+    {
         public string name { get; set; }
+
     }
 
     public class Developer
@@ -33,11 +42,6 @@
     }
 
     public class Genre
-    {
-        public string name { get; set; }
-    }
-
-    public class Tag
     {
         public string name { get; set; }
     }
