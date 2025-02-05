@@ -27,7 +27,7 @@ namespace MyGameTrackr.Services
             try
             {
                 var client = _clientfactory.CreateClient("GetGameDetails");
-                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(id+_config.GetValue<string>("RAWG_API_KEY"));
+                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(id+ Environment.GetEnvironmentVariable("RAWG_API_KEY"));
 
                 response.Data = _mapper.Map<GetGameDetailDTO>(gamedetail);
             }
@@ -51,7 +51,7 @@ namespace MyGameTrackr.Services
 
                 var formattedName = gameName.Replace(" ", "-").ToLower();                          //transforma a barra de espaço inserida pelo usuário por uma barra.
 
-                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(formattedName + _config.GetValue<string>("RAWG_API_KEY"));
+                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(formattedName + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
                 response.Data = _mapper.Map<GetGameDetailDTO>(gamedetail);
             }
             catch (Exception ex)
