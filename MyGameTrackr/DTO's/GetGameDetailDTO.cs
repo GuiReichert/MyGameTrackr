@@ -4,14 +4,14 @@ namespace MyGameTrackr.DTO_s
 {
     public class GetGameDetailDTO
     {
-            public int id { get; set; }
-            public string name { get; set; }
-            public string website { get; set; }
-            public Parent_Platforms[] parent_platforms { get; set; }
-            public Store[] stores { get; set; }
-            public Developer[] developers { get; set; }
-            public Genre[] genres { get; set; }
-            public string description_raw { get; set; }
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Website { get; set; }
+            public Parent_Platforms[] Parent_platforms { get; set; }
+            public Store[] Stores { get; set; }
+            public Developer[] Developers { get; set; }
+            public Genre[] Genres { get; set; }
+            public string Description_raw { get; set; }
         }
 
 }

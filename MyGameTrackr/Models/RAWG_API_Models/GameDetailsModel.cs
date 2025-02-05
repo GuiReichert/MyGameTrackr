@@ -4,9 +4,7 @@
     public class GameDetailsModel
     {
         public int id { get; set; }
-        public string slug { get; set; }
         public string name { get; set; }
-        public string name_original { get; set; }
         public string description { get; set; }
         public string website { get; set; }
         public Parent_Platforms[] parent_platforms { get; set; }

@@ -1,17 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using MyGameTrackr.Database;
 using MyGameTrackr.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-DotNetEnv.Env.Load();
 
 
-// Add services to the container.
+DotNetEnv.Env.Load();                                                               // loads the ".env" package
+
+
+
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+
+
+
+
+builder.Services.AddDbContext<MyGameTrackr_Context>(x=> x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient();                                                   // adds the client factory
 builder.Services.AddHttpClient("GetGameDetails", x =>
 {
@@ -23,9 +32,16 @@ builder.Services.AddScoped<ISearchGames,SearchGames>();
 
 
 
+
+
+
+
+
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
