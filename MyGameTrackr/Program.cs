@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyGameTrackr.Database;
+using MyGameTrackr.Models.User;
 using MyGameTrackr.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,7 @@ builder.Services.AddHttpClient("GetGameDetails", x =>
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ISearchGames,SearchGames>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 
 
 
@@ -47,6 +50,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+
 
 
 

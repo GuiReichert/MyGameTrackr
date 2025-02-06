@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGameTrackr.Database;
 
@@ -11,9 +12,11 @@ using MyGameTrackr.Database;
 namespace MyGameTrackr.Migrations
 {
     [DbContext(typeof(MyGameTrackr_Context))]
-    partial class MyGameTrackr_ContextModelSnapshot : ModelSnapshot
+    [Migration("20250206200344_Fixing_Database_Relationships")]
+    partial class Fixing_Database_Relationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,7 @@ namespace MyGameTrackr.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGames", (string)null);
+                    b.ToTable("UserGames");
                 });
 
             modelBuilder.Entity("MyGameTrackr.Models.User.User_Model", b =>
@@ -79,7 +82,7 @@ namespace MyGameTrackr.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MyGameTrackr.Models.User.UserGames_Model", b =>
