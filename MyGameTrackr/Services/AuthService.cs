@@ -1,5 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyGameTrackr.Database;
 using MyGameTrackr.DTO_s;
 using MyGameTrackr.Models;
@@ -49,9 +52,9 @@ namespace MyGameTrackr.Services
                 var user = await db.Users.FirstOrDefaultAsync(x => x.Username.ToLower() == Username.ToLower());
                 if(user == null  || !VerifyPasswordHash(Password, user.PasswordHash, user.PasswordSalt))
                 {
-                    throw new Exception("Username or Password incorrect");
+                    throw new Exception("Username or Password is incorrect");
                 }
-                response.Data = user.Id.ToString();
+                response.Data = CreateToken(user);
             }
             catch (Exception ex)
             {
@@ -92,6 +95,35 @@ namespace MyGameTrackr.Services
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
+
+
+        string CreateToken(User_Model user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name,user.Username)
+
+            };
+
+            var settingsKey = Environment.GetEnvironmentVariable("Token");
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(settingsKey!));
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(20),
+                SigningCredentials = credentials
+            };
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+
+            SecurityToken token = handler.CreateToken(tokenDescriptor);
+
+            return handler.WriteToken(token);
+        }
+
 
 
     }
