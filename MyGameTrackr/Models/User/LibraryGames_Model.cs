@@ -1,9 +1,9 @@
 ﻿namespace MyGameTrackr.Models.User
 {
-    public class UserGames_Model
+    public class LibraryGames_Model
     {
         public int Id { get; set; }
-        public User_Model User {  get; set; }
+        public UserLibrary_Model UserLibrary {  get; set; }
         public int APIGameId {  get; set; }
         public string GameName { get; set; } = string.Empty;
         public GameState? CurrentState;

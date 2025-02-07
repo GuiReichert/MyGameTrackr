@@ -20,16 +20,16 @@ namespace MyGameTrackr.Services
 
 
 
-        public async Task<ServiceResponse<GetGameDetailDTO>> FindGameById(int id)
+        public async Task<ServiceResponse<GetAPIGameDetailDTO>> FindGameById(int id)
         {
-            var response = new ServiceResponse<GetGameDetailDTO>();
+            var response = new ServiceResponse<GetAPIGameDetailDTO>();
 
             try
             {
                 var client = _clientfactory.CreateClient("GetGameDetails");
                 var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(id+ Environment.GetEnvironmentVariable("RAWG_API_KEY"));
 
-                response.Data = _mapper.Map<GetGameDetailDTO>(gamedetail);
+                response.Data = _mapper.Map<GetAPIGameDetailDTO>(gamedetail);
             }
             catch (Exception ex)
             {
@@ -41,9 +41,9 @@ namespace MyGameTrackr.Services
 
         }
 
-        public async Task<ServiceResponse<GetGameDetailDTO>> FindGameByName(string gameName)
+        public async Task<ServiceResponse<GetAPIGameDetailDTO>> FindGameByName(string gameName)
         {
-            var response = new ServiceResponse<GetGameDetailDTO>();
+            var response = new ServiceResponse<GetAPIGameDetailDTO>();
 
             try
             {
@@ -52,7 +52,7 @@ namespace MyGameTrackr.Services
                 var formattedName = gameName.Replace(" ", "-").ToLower();                          //transforma a barra de espaço inserida pelo usuário por uma barra.
 
                 var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(formattedName + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
-                response.Data = _mapper.Map<GetGameDetailDTO>(gamedetail);
+                response.Data = _mapper.Map<GetAPIGameDetailDTO>(gamedetail);
             }
             catch (Exception ex)
             {

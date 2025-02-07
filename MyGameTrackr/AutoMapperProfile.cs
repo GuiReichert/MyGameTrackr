@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Migrations.Operations.Builders;
 using MyGameTrackr.DTO_s;
 using MyGameTrackr.Models.RAWG_API_Models;
+using MyGameTrackr.Models.User;
 
 namespace MyGameTrackr
 {
@@ -8,7 +10,8 @@ namespace MyGameTrackr
     {
         public AutoMapperProfile()
         {
-            CreateMap<GameDetailsModel, GetGameDetailDTO>();
+            CreateMap<GameDetailsModel, GetAPIGameDetailDTO>();
+            CreateMap<LibraryGames_Model,GetLibraryGameDetailDTO>();
         }
     }
 }

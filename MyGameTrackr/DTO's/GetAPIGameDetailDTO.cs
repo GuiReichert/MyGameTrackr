@@ -2,7 +2,7 @@
 
 namespace MyGameTrackr.DTO_s
 {
-    public class GetGameDetailDTO
+    public class GetAPIGameDetailDTO
     {
             public int Id { get; set; }
             public string Name { get; set; }

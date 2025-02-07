@@ -8,6 +8,6 @@ namespace MyGameTrackr.Models.User
         public string Username { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; } = new byte[0];
         public byte[] PasswordSalt { get; set; } = new byte[0];
-        public List<UserGames_Model> UserGames { get; set; } = new List<UserGames_Model>();
+        public UserLibrary_Model UserLibrary { get; set; } = new UserLibrary_Model();
     }
 }

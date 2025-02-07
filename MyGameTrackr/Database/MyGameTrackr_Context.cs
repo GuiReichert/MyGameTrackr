@@ -12,7 +12,9 @@ namespace MyGameTrackr.Database
         }
 
         public DbSet<User_Model> Users { get; set; }
-        public DbSet<UserGames_Model> UserGames { get; set; }
+        public DbSet<UserLibrary_Model> UserLibraries { get; set; }
+        public DbSet<LibraryGames_Model> UserGames { get; set; }
+
 
 
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGameTrackr.Database;
 
@@ -11,9 +12,11 @@ using MyGameTrackr.Database;
 namespace MyGameTrackr.Migrations
 {
     [DbContext(typeof(MyGameTrackr_Context))]
-    partial class MyGameTrackr_ContextModelSnapshot : ModelSnapshot
+    [Migration("20250207193515_Adding_UserLibrary")]
+    partial class Adding_UserLibrary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

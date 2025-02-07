@@ -18,13 +18,13 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpGet("Find Game by Id")]
-        public async Task<ActionResult<ServiceResponse<GetGameDetailDTO>>> GetDetailsById(int Id)
+        public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsById(int Id)
         {
             return Ok(await _searchgames.FindGameById(Id));
         }
 
         [HttpGet("Find Game by Name")]
-        public async Task<ActionResult<ServiceResponse<GetGameDetailDTO>>> GetDetailsByName(string Game_Name)
+        public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsByName(string Game_Name)
         {
             return Ok(await _searchgames.FindGameByName(Game_Name));
         }
