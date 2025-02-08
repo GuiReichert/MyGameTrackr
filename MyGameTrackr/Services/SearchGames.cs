@@ -27,7 +27,7 @@ namespace MyGameTrackr.Services
             try
             {
                 var client = _clientfactory.CreateClient("GetGameDetails");
-                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(id+ Environment.GetEnvironmentVariable("RAWG_API_KEY"));
+                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(id + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
 
                 response.Data = _mapper.Map<GetAPIGameDetailDTO>(gamedetail);
             }

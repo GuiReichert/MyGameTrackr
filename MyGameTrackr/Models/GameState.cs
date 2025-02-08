@@ -5,6 +5,6 @@ namespace MyGameTrackr.Models
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum GameState
     {
-        Wishlist, Purchased, Dropped , Played,
+        Wishlist = 1, Purchased, Dropped , Played
     }
 }
