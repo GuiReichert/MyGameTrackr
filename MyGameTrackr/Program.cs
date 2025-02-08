@@ -91,3 +91,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
+////////// Adicionar "BADREQUEST" aos controllers e exceções para quando não encontrar resultado nas apis (ISearchGames)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGameTrackr.Database;
 
@@ -10,9 +11,11 @@ using MyGameTrackr.Database;
 namespace MyGameTrackr.Migrations
 {
     [DbContext(typeof(MyGameTrackr_Context))]
-    partial class MyGameTrackr_ContextModelSnapshot : ModelSnapshot
+    [Migration("20250208180920_Fixing_Datetime")]
+    partial class Fixing_Datetime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -9,7 +9,7 @@
 
         public GameState CurrentState { get; set; } = GameState.Wishlist;
         public int? Score { get; set; }
-        public DateTime? LastStateUpdate { get; set; }
+        public string LastStateUpdated { get; set; }
         public string Comment { get; set; } = string.Empty;
         
     }

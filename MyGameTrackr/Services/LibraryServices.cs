@@ -60,7 +60,7 @@ namespace MyGameTrackr.Services
                     GameName = searchAPI.Data.Name,
                     CurrentState = parsedCurrentState,
                     Score = request.Score,
-                    LastStateUpdate = DateTime.Now,
+                    LastStateUpdated = DateTime.Now.ToString("G"),
                     Comment = request.Comment
                 };
 
