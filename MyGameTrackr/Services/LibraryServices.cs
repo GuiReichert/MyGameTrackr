@@ -82,7 +82,32 @@ namespace MyGameTrackr.Services
 
         public async Task<ServiceResponse<List<GetLibraryGameDetailDTO>>> DeleteGameFromLibrary(int APIGameId, int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetLibraryGameDetailDTO>>();
+            try
+            {
+                var Library = await db.UserLibraries.Include(x=> x.Games).FirstOrDefaultAsync(x=> x.User_ModelId == userId);
+                var gameToDelete = Library.Games.FirstOrDefault(x=> x.APIGameId == APIGameId);
+                if (gameToDelete == null)
+                {
+                    throw new Exception("This game is not in your library.");
+                }
+
+                db.UserGames.Remove(gameToDelete);
+                await db.SaveChangesAsync();
+
+                var newLibrary = await db.UserLibraries.Include(x=> x.Games).FirstOrDefaultAsync(x => x.User_ModelId == userId);
+                var LibraryGames = newLibrary.Games.ToList();
+
+                    response.Data = _mapper.Map<List<GetLibraryGameDetailDTO>>(newLibrary.Games);
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
+
         }
 
         public async Task<ServiceResponse<List<GetLibraryGameDetailDTO>>> GetGamesFromLibrary(int userId)
@@ -109,7 +134,7 @@ namespace MyGameTrackr.Services
             {
                 var library = await db.UserLibraries.Include(x => x.Games).FirstOrDefaultAsync(x => x.User_ModelId == userId);
                 var gameList = _mapper.Map<List<GetLibraryGameDetailDTO>>(library!.Games);
-                response.Data = gameList.OrderBy(x => x.Score).Take(5).ToList();
+                response.Data = gameList.OrderByDescending(x => x.Score).Take(5).ToList();
             }
             catch (Exception ex)
             {
@@ -119,9 +144,46 @@ namespace MyGameTrackr.Services
             return response;
         }
 
-        public async Task<ServiceResponse<GetLibraryGameDetailDTO>> UpdateGameInLibrary(GetLibraryGameDetailDTO request, int userId)
+        public async Task<ServiceResponse<GetLibraryGameDetailDTO>> UpdateGameInLibrary(AddLibraryGameDTO request, int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<GetLibraryGameDetailDTO>();
+            try
+            {
+                var library = await db.UserLibraries.Include(x=> x.Games).FirstOrDefaultAsync(x => x.User_ModelId == userId);
+                var gameToUpdate = library.Games.FirstOrDefault(x=> x.APIGameId == request.APIGameId)!;
+                if(gameToUpdate == null)
+                {
+                    throw new Exception("You haven't added this game to your library yet.");
+                }
+                if(!Enum.IsDefined(typeof(GameState),request.CurrentState) || !Enum.TryParse<GameState>(request.CurrentState, true, out var parsedCurrentState))
+                {
+                    throw new Exception("Invalid game state. You must choose a state between: Wishlist, Purchased, Dropped, or Played.");
+                }
+
+
+
+                gameToUpdate.Score = request.Score;
+                gameToUpdate.CurrentState = parsedCurrentState;
+                gameToUpdate.LastStateUpdated = DateTime.Now.ToString("G");
+                gameToUpdate.Comment = request.Comment;
+
+                await db.SaveChangesAsync();
+
+                response.Data = _mapper.Map<GetLibraryGameDetailDTO>(gameToUpdate);
+
+
+            }
+            catch(Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
+
+
+
+
+
 }

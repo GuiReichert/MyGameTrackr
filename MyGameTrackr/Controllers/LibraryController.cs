@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -22,25 +23,73 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpPost("Add Game to Library")]
-        public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> AddToLibrary (AddLibraryGameDTO gameDetails)
+        public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> AddToLibrary (AddLibraryGameDTO request)
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-            return Ok(await _library.AddGameToLibrary(gameDetails, userId));
+            var response = await _library.AddGameToLibrary(request, userId);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
-        [HttpPost("My Games")]
+        [HttpGet("My Games")]
         public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> GetMyGames()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-            return Ok(await _library.GetGamesFromLibrary(userId));
+            var response = await _library.GetGamesFromLibrary(userId);
+            
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
-        [HttpPost("My Top Ranked Games")]
+        [HttpGet("My Top Ranked Games")]
         public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> GetMyTop5()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-            return Ok(await _library.MyTopRatedGames(userId));
+            var response = await _library.MyTopRatedGames(userId);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
+
+
+        [HttpDelete("Delete Game from Library")]
+        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> DeleteFromLibrary(int GameId)
+        {
+            var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
+            var response = await _library.DeleteGameFromLibrary(GameId, userId);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+
+        }
+
+        [HttpPut("Update Game in Library")]
+        public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> UpdateGameInLibrary(AddLibraryGameDTO request)
+        {
+            int userId = int.Parse((User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.NameIdentifier))!.Value);
+            var response = await _library.UpdateGameInLibrary(request, userId);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+            
+        }
+
 
 
     }
