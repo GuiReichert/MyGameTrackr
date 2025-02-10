@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using MyGameTrackr.Models;
 using MyGameTrackr.Models.User;
 
 namespace MyGameTrackr.Database
@@ -14,6 +15,8 @@ namespace MyGameTrackr.Database
         public DbSet<User_Model> Users { get; set; }
         public DbSet<UserLibrary_Model> UserLibraries { get; set; }
         public DbSet<LibraryGames_Model> UserGames { get; set; }
+        public DbSet<WebsiteGameDetails_Model> websiteGames { get; set; }
+        public DbSet<GameReview_Model> GameReviews { get; set; }
 
 
 

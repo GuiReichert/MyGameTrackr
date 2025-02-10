@@ -27,12 +27,12 @@ namespace MyGameTrackr.Services
             try
             {
                 var client = _clientfactory.CreateClient("GetGameDetails");
-                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(id + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
+                var gamedetail = await client.GetFromJsonAsync<APIGameDetailsModel>(id + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
 
 
                 response.Data = _mapper.Map<GetAPIGameDetailDTO>(gamedetail);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Success = false;
                 response.Message = $"Could not find a game in the API with the following Id: {id}";
@@ -52,13 +52,13 @@ namespace MyGameTrackr.Services
 
                 var formattedName = gameName.Replace(" ", "-").ToLower();                          //transforma a barra de espaço inserida pelo usuário por uma barra.
 
-                var gamedetail = await client.GetFromJsonAsync<GameDetailsModel>(formattedName + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
+                var gamedetail = await client.GetFromJsonAsync<APIGameDetailsModel>(formattedName + Environment.GetEnvironmentVariable("RAWG_API_KEY"));
 
 
 
                 response.Data = _mapper.Map<GetAPIGameDetailDTO>(gamedetail);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Success = false;
                 response.Message = $"Could not find a game in the API with the following name: '{gameName}'. Try checking the spelling or text formatting"; 
