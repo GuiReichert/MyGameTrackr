@@ -1,7 +1,7 @@
 ﻿namespace MyGameTrackr.Models.RAWG_API_Models
 {
 
-    public class GameDetailsModel
+    public class APIGameDetailsModel
     {
         public int id { get; set; }
         public string name { get; set; }

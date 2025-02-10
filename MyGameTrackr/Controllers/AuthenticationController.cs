@@ -7,7 +7,7 @@ using MyGameTrackr.Services;
 namespace MyGameTrackr.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("authentication")]
     public class AuthenticationController : ControllerBase
     {
         private Services.IAuthService _authService;
@@ -18,7 +18,7 @@ namespace MyGameTrackr.Controllers
         }
         
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<string>>> Register(string Username, string Password)
         {
             var response = await _authService.Register(Username,Password);
@@ -31,7 +31,7 @@ namespace MyGameTrackr.Controllers
         }
 
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(string username, string password)
         {
             var response = await _authService.Login(username, password);

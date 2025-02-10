@@ -12,7 +12,7 @@ using MyGameTrackr.Services;
 namespace MyGameTrackr.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("library")]
     [Authorize]
     public class LibraryController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace MyGameTrackr.Controllers
            _library = libraryServices;
         }
 
-        [HttpPost("Add Game to Library")]
+        [HttpPost("games")]
         public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> AddToLibrary (AddLibraryGameDTO request)
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
@@ -35,7 +35,7 @@ namespace MyGameTrackr.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet("My Games")]
+        [HttpGet("games/my-games")]
         public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> GetMyGames()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
@@ -49,7 +49,7 @@ namespace MyGameTrackr.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet("My Top Ranked Games")]
+        [HttpGet("games/my-top-5")]
         public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> GetMyTop5()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
@@ -63,7 +63,7 @@ namespace MyGameTrackr.Controllers
         }
 
 
-        [HttpDelete("Delete Game from Library")]
+        [HttpDelete("games/{gameId}")]
         public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> DeleteFromLibrary(int GameId)
         {
             var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
@@ -77,7 +77,7 @@ namespace MyGameTrackr.Controllers
 
         }
 
-        [HttpPut("Update Game in Library")]
+        [HttpPut("games")]
         public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> UpdateGameInLibrary(AddLibraryGameDTO request)
         {
             int userId = int.Parse((User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.NameIdentifier))!.Value);
