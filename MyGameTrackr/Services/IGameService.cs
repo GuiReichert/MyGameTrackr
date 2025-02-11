@@ -8,7 +8,7 @@ namespace MyGameTrackr.Services
         public void ProcessOverallScore(Game_Model game);
         public void AddGameToDb(int APIGameId, string gameName);
         public Task<ServiceResponse<GetPublicGameReviewsDTO>> GetGamePublicReviews(int APIGameId);
-        public Task<ServiceResponse<GetPublicGameReviewsDTO>> TopRankedGames();
+        public Task<ServiceResponse<List<GetPublicGameReviewsDTO>>> TopRankedGames();
 
 
     }
