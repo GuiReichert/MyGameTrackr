@@ -23,7 +23,7 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpPost("games")]
-        public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> AddToLibrary (AddLibraryGameDTO request)
+        public async Task<ActionResult<ServiceResponse<GetLibraryGameReviewDTO>>> AddToLibrary (AddLibraryGameReviewDTO request)
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
             var response = await _library.AddGameToLibrary(request, userId);
@@ -36,7 +36,7 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpGet("games/my-games")]
-        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> GetMyGames()
+        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> GetMyGames()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
             var response = await _library.GetGamesFromLibrary(userId);
@@ -50,7 +50,7 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpGet("games/my-top-5")]
-        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> GetMyTop5()
+        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> GetMyTop5()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
             var response = await _library.MyTopRatedGames(userId);
@@ -64,7 +64,7 @@ namespace MyGameTrackr.Controllers
 
 
         [HttpDelete("games/{gameId}")]
-        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameDetailDTO>>>> DeleteFromLibrary(int GameId)
+        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> DeleteFromLibrary(int GameId)
         {
             var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
             var response = await _library.DeleteGameFromLibrary(GameId, userId);
@@ -78,7 +78,7 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpPut("games")]
-        public async Task<ActionResult<ServiceResponse<GetLibraryGameDetailDTO>>> UpdateGameInLibrary(AddLibraryGameDTO request)
+        public async Task<ActionResult<ServiceResponse<GetLibraryGameReviewDTO>>> UpdateGameInLibrary(AddLibraryGameReviewDTO request)
         {
             int userId = int.Parse((User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.NameIdentifier))!.Value);
             var response = await _library.UpdateGameInLibrary(request, userId);

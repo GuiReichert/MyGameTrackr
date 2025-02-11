@@ -49,6 +49,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ISearchGames,SearchGames>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<ILibraryServices,LibraryServices>();
+builder.Services.AddScoped<IGameService, GameService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer( x=> {
     x.TokenValidationParameters = new TokenValidationParameters

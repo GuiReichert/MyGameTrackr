@@ -12,8 +12,6 @@ namespace MyGameTrackr
         public AutoMapperProfile()
         {
             CreateMap<APIGameDetailsModel, GetAPIGameDetailDTO>();
-            CreateMap<LibraryGames_Model,GetLibraryGameDetailDTO>();
-            CreateMap<AddLibraryGameDTO, LibraryGames_Model>();
         }
     }
 }
