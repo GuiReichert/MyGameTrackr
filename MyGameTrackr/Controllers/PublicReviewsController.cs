@@ -16,13 +16,13 @@ namespace MyGameTrackr.Controllers
             _gameservice = gameService;
         }
 
-        [HttpGet("game/{Id}")]
-        public async Task<ActionResult<ServiceResponse<GetPublicGameReviewsDTO>>> GetGamePublicReviews(int Id)
+        [HttpGet("game/{id}")]
+        public async Task<ActionResult<ServiceResponse<GetPublicGameReviewsDTO>>> GetGamePublicReviews(int id)
         {
-            return Ok(await _gameservice.GetGamePublicReviews(Id));
+            return Ok(await _gameservice.GetGamePublicReviews(id));
         }
 
-        [HttpGet("top-ranked-games")]
+        [HttpGet("top-rated-games")]
         public async Task<ActionResult<ServiceResponse<List<GetPublicGameReviewsDTO>>>> GetTopRankedGames()
         {
             return Ok(await _gameservice.TopRankedGames());

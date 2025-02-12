@@ -36,10 +36,10 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpGet("games/my-games")]
-        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> GetMyGames()
+        public ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>> GetMyGames()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-            var response = await _library.GetGamesFromLibrary(userId);
+            var response =  _library.GetGamesFromLibrary(userId);
             
 
             if (response.Success)
@@ -50,10 +50,10 @@ namespace MyGameTrackr.Controllers
         }
 
         [HttpGet("games/my-top-5")]
-        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> GetMyTop5()
+        public ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>> GetMyTop5()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-            var response = await _library.MyTopRatedGames(userId);
+            var response = _library.MyTopRatedGames(userId);
 
             if (response.Success)
             {
@@ -63,11 +63,11 @@ namespace MyGameTrackr.Controllers
         }
 
 
-        [HttpDelete("games/{gameId}")]
-        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> DeleteFromLibrary(int GameId)
+        [HttpDelete("games/{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>>> DeleteFromLibrary(int id)
         {
             var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-            var response = await _library.DeleteGameFromLibrary(GameId, userId);
+            var response = await _library.DeleteGameFromLibrary(id, userId);
 
             if (response.Success)
             {

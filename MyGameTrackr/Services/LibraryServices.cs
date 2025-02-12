@@ -94,22 +94,115 @@ namespace MyGameTrackr.Services
 
         public async Task<ServiceResponse<List<GetLibraryGameReviewDTO>>> DeleteGameFromLibrary(int APIGameId, int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
+            try
+            {
+                var game = await db.GameReviews.Include(x => x.UserLibrary).Include(x => x.Game_Model).FirstOrDefaultAsync(x => x.UserLibrary.User_ModelId == userId && x.Game_Model.APIGameId == APIGameId);
+                if (game == null)
+                {
+                    throw new Exception("This game is not in your library yet.");
+                }
+
+                db.GameReviews.Remove(game);
+                await db.SaveChangesAsync();
+
+                _gameService.ProcessOverallScore(game.Game_Model);
+
+                response.Data = Map_List_GameReviewDTO(userId);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public async Task<ServiceResponse<List<GetLibraryGameReviewDTO>>> GetGamesFromLibrary(int userId)
+        public ServiceResponse<List<GetLibraryGameReviewDTO>> GetGamesFromLibrary(int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
+            try
+            {
+                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(x=> x.LastStateUpdated).ToList();
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public async Task<ServiceResponse<List<GetLibraryGameReviewDTO>>> MyTopRatedGames(int userId)
+        public ServiceResponse<List<GetLibraryGameReviewDTO>> MyTopRatedGames(int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
+            try
+            {
+                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(x => x.Score).Take(5).ToList();
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<GetLibraryGameReviewDTO>> UpdateGameInLibrary(AddLibraryGameReviewDTO request, int userId)
+        public async Task<ServiceResponse<GetLibraryGameReviewDTO>> UpdateGameInLibrary(AddLibraryGameReviewDTO request, int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<GetLibraryGameReviewDTO>();
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
+
+
+        private  List<GetLibraryGameReviewDTO> Map_List_GameReviewDTO(int userId)
+        {
+            var userReviews = db.GameReviews.Include(x => x.Game_Model).Where(x => x.UserLibrary.User_ModelId == userId).ToList();
+            var userReviewsDTO = new List<GetLibraryGameReviewDTO>();
+
+            foreach (var userReview in userReviews)
+            {
+                var review = new GetLibraryGameReviewDTO
+                {
+                    GameName = userReview.Game_Model.GameName,
+                    CurrentState = userReview.CurrentState,
+                    LastStateUpdated = userReview.LastStateUpdated.ToString("G"),
+                    Score = userReview.Score,
+                    Comment = userReview.Comment
+                };
+                userReviewsDTO.Add(review);
+            }
+
+            return userReviewsDTO;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

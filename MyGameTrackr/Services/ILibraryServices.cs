@@ -11,8 +11,8 @@ namespace MyGameTrackr.Services
         public Task<ServiceResponse<GetLibraryGameReviewDTO>> UpdateGameInLibrary(AddLibraryGameReviewDTO request, int userId);
 
         public Task<ServiceResponse<List<GetLibraryGameReviewDTO>>> DeleteGameFromLibrary(int APIGameId, int userId);
-        public Task<ServiceResponse<List<GetLibraryGameReviewDTO>>> GetGamesFromLibrary(int userId);
+        public ServiceResponse<List<GetLibraryGameReviewDTO>> GetGamesFromLibrary(int userId);
 
-        public Task<ServiceResponse<List<GetLibraryGameReviewDTO>>> MyTopRatedGames(int userId);
+        public ServiceResponse<List<GetLibraryGameReviewDTO>> MyTopRatedGames(int userId);
     }
 }
