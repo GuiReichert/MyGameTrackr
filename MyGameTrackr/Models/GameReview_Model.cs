@@ -12,7 +12,7 @@ namespace MyGameTrackr.Models
         public string Comment {  get; set; } = string.Empty;
         public bool isAnonymousReview { get; set; }
         public GameState CurrentState { get; set; } = GameState.Wishlist;
-        public DateTime LastStateUpdated { get; set; }
+        public DateTime LastUpdate { get; set; }
 
     }
 }

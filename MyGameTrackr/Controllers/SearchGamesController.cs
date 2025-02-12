@@ -17,10 +17,10 @@ namespace MyGameTrackr.Controllers
             _searchgames = searchGames;
         }
 
-        [HttpGet("details/id/{Id}")]
-        public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsById(int Id)
+        [HttpGet("details/id/{id}")]
+        public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsById(int id)
         {
-            var response = await _searchgames.FindGameById(Id);
+            var response = await _searchgames.FindGameById(id);
             if (response.Success)
             {
                 return Ok(response);
@@ -28,10 +28,10 @@ namespace MyGameTrackr.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet("details/name/{Game_Name}")]
-        public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsByName(string Game_Name)
+        [HttpGet("details/name/{game_name}")]
+        public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsByName(string game_name)
         {
-            var response = await _searchgames.FindGameByName(Game_Name);
+            var response = await _searchgames.FindGameByName(game_name);
             if (response.Success)
             {
                 return Ok(response);

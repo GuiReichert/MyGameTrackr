@@ -52,6 +52,7 @@ namespace MyGameTrackr.Services
                 }
 
 
+
                 var game = await db.Games.FirstOrDefaultAsync(x=> x.APIGameId == request.APIGameId);
                 var newReview = new GameReview_Model
                 {
@@ -62,7 +63,7 @@ namespace MyGameTrackr.Services
                     Comment = request.Comment,
                     isAnonymousReview = request.isAnonymousReview,
                     CurrentState = parsedCurrentState,
-                    LastStateUpdated = DateTime.Now
+                    LastUpdate = DateTime.Now
                 };
 
 
@@ -77,7 +78,7 @@ namespace MyGameTrackr.Services
                 {
                     GameName = game.GameName,
                     CurrentState = parsedCurrentState,
-                    LastStateUpdated = newReview.LastStateUpdated.ToString("G"),
+                    LastUpdate = newReview.LastUpdate.ToString("G"),
                     Score = request.Score,
                     Comment = request.Comment
                 };
@@ -126,7 +127,7 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
             try
             {
-                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(x=> x.LastStateUpdated).ToList();
+                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(x=> x.LastUpdate).ToList();
             }
             catch (Exception ex)
             {
@@ -156,6 +157,39 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<GetLibraryGameReviewDTO>();
             try
             {
+                var reviewToChange = await db.GameReviews.Include(x => x.Game_Model).FirstOrDefaultAsync(x => x.Game_Model.APIGameId == request.APIGameId && x.UserLibrary.User_ModelId == userId);
+                if (reviewToChange == null)
+                {
+                    throw new Exception("This game is not in your library yet.");
+                }
+
+                if (request.Score < 0 || request.Score > 10)
+                {
+                    throw new Exception("You must provide a score between 0 and 10.");
+                }
+                if (!Enum.IsDefined(typeof(GameState),request.CurrentState)|| !Enum.TryParse<GameState>(request.CurrentState,true,out var parsedCurrentState))
+                {
+                    throw new Exception("Invalid game state. You must choose a state between: Wishlist, Purchased, Dropped, or Played.");
+                }
+
+                reviewToChange.LastUpdate = DateTime.Now;
+                reviewToChange.isAnonymousReview = request.isAnonymousReview;
+                reviewToChange.Score = request.Score;
+                reviewToChange.Comment = request.Comment;
+                reviewToChange.CurrentState = parsedCurrentState;
+
+                await db.SaveChangesAsync();
+
+                _gameService.ProcessOverallScore(reviewToChange.Game_Model);
+
+                response.Data = new GetLibraryGameReviewDTO
+                {
+                    GameName = reviewToChange.Game_Model.GameName,
+                    CurrentState = parsedCurrentState,
+                    LastUpdate = reviewToChange.LastUpdate.ToString("G"),
+                    Score = reviewToChange.Score,
+                    Comment = reviewToChange.Comment
+                };
 
             }
             catch (Exception ex)
@@ -178,7 +212,7 @@ namespace MyGameTrackr.Services
                 {
                     GameName = userReview.Game_Model.GameName,
                     CurrentState = userReview.CurrentState,
-                    LastStateUpdated = userReview.LastStateUpdated.ToString("G"),
+                    LastUpdate = userReview.LastUpdate.ToString("G"),
                     Score = userReview.Score,
                     Comment = userReview.Comment
                 };

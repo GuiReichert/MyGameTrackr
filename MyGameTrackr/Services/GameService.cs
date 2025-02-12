@@ -28,7 +28,7 @@ namespace MyGameTrackr.Services
                 {
                     throw new Exception("This game has not been added to any libraries yet.");
                 }
-                var gameReviews = await db.GameReviews.Include(x => x.Game_Model).Include(x => x.UserLibrary).ThenInclude(x => x.User).Where(x => x.Game_Model.APIGameId == APIGameId && !x.isAnonymousReview).ToListAsync();
+                var gameReviews = await db.GameReviews.Include(x => x.Game_Model).Include(x => x.UserLibrary).ThenInclude(x => x.User).Where(x => x.Game_Model.APIGameId == APIGameId && !x.isAnonymousReview).OrderByDescending(x=> x.LastUpdate).ToListAsync();
                 if (gameReviews.Count == 0)
                 {
                     throw new Exception("This game has no public reviews yet.");
@@ -62,7 +62,7 @@ namespace MyGameTrackr.Services
                 {
                     var gameReviews = game.Reviews.Where(x=> !x.isAnonymousReview).ToList();
                     var reviewsDTO = MapPublicGameReviews(game, gameReviews);
-                    reviewsDTO.GameReviews = reviewsDTO.GameReviews.OrderByDescending(x => x.LastStateUpdated).Take(5).ToList();
+                    reviewsDTO.GameReviews = reviewsDTO.GameReviews.OrderByDescending(x => x.LastUpdate).Take(5).ToList();
                     topGamesReviews.Add(reviewsDTO);
                 }
 
@@ -132,7 +132,7 @@ namespace MyGameTrackr.Services
                     Username = gameReview.UserLibrary.User.Username,
                     Score = gameReview.Score,
                     CurrentState = gameReview.CurrentState,
-                    LastStateUpdated = gameReview.LastStateUpdated.ToString("G"),
+                    LastUpdate = gameReview.LastUpdate.ToString("G"),
                     Comment = gameReview.Comment
                 };
                 ReviewsDTO.Add(singularReview);
