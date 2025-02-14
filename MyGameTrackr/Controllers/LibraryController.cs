@@ -12,7 +12,7 @@ using MyGameTrackr.Services;
 namespace MyGameTrackr.Controllers
 {
     [ApiController]
-    [Route("library")]
+    [Route("user-library")]
     [Authorize]
     public class LibraryController : ControllerBase
     {
@@ -35,7 +35,7 @@ namespace MyGameTrackr.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet("games/my-games")]
+        [HttpGet("games/all")]
         public ActionResult<ServiceResponse<List<GetLibraryGameReviewDTO>>> GetMyGames()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);

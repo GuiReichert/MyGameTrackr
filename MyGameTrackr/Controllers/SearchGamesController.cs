@@ -7,7 +7,7 @@ namespace MyGameTrackr.Controllers
 {
 
     [ApiController]
-    [Route("search-games")]
+    [Route("search")]
     public class SearchGamesController : ControllerBase
     {
         private ISearchGames _searchgames;

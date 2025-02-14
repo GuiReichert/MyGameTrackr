@@ -113,7 +113,7 @@ namespace MyGameTrackr.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(20),
+                Expires = DateTime.Now.AddHours(10),
                 SigningCredentials = credentials
             };
 

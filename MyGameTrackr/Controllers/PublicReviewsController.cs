@@ -7,7 +7,7 @@ using MyGameTrackr.Services;
 namespace MyGameTrackr.Controllers
 {
     [ApiController]
-    [Route("games/public-reviews")]
+    [Route("public-reviews/games")]
     public class PublicReviewsController : ControllerBase
     {
         private IGameService _gameservice;
@@ -17,7 +17,7 @@ namespace MyGameTrackr.Controllers
             _gameservice = gameService;
         }
 
-        [HttpGet("game/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetPublicGameReviewsDTO>>> GetGamePublicReviews(int id)
         {
             var response = await _gameservice.GetGamePublicReviews(id);
@@ -29,7 +29,7 @@ namespace MyGameTrackr.Controllers
 
         }
 
-        [HttpGet("top-rated-games")]
+        [HttpGet("top-rated")]
         public async Task<ActionResult<ServiceResponse<List<GetPublicGameReviewsDTO>>>> GetTopRankedGames()
         {
             var response = await _gameservice.TopRankedGames();

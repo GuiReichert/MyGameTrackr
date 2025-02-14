@@ -106,7 +106,7 @@ namespace MyGameTrackr.Services
 
         public void ProcessOverallScore(Game_Model game)
         {
-            var PublicReviews = db.GameReviews.Where(x=> x.Game_ModelId == game.Id && !x.isAnonymousReview).ToList();
+            var PublicReviews = db.GameReviews.Where(x=> x.Game_ModelId == game.Id && !x.isAnonymousReview && x.CurrentState != GameState.Wishlist).ToList();
 
             if (PublicReviews.Count == 0)
             {
