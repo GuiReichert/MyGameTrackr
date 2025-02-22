@@ -23,12 +23,12 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<GetPublicGameReviewsDTO>();
             try
             {
-                var game = await db.Games.FirstOrDefaultAsync(x => x.APIGameId == APIGameId);
+                var game = await db.Games.FirstOrDefaultAsync(game => game.APIGameId == APIGameId);
                 if (game == null)
                 {
                     throw new Exception("This game has not been added to any libraries yet.");
                 }
-                var gameReviews = await db.GameReviews.Include(x => x.Game_Model).Include(x => x.UserLibrary).ThenInclude(x => x.User).Where(x => x.Game_Model.APIGameId == APIGameId && !x.isAnonymousReview).OrderByDescending(x=> x.LastUpdate).ToListAsync();
+                var gameReviews = await db.GameReviews.Include(review => review.Game_Model).Include(review => review.UserLibrary).ThenInclude(library => library.User).Where(review => review.Game_Model.APIGameId == APIGameId && !review.isAnonymousReview).OrderByDescending(review => review.LastUpdate).ToListAsync();
                 if (gameReviews.Count == 0)
                 {
                     throw new Exception("This game has no public reviews yet.");
@@ -55,14 +55,14 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<List<GetPublicGameReviewsDTO>>();
             try
             {
-                var topGames = await db.Games.Include(x => x.Reviews).ThenInclude(x => x.UserLibrary).ThenInclude(x=>x.User).Where(x => x.OverallScore != 0).OrderByDescending(x => x.OverallScore).Take(10).ToListAsync();     //"Where" statement takes out of ALL games that ONLY HAVE anonymous reviews!
+                var topGames = await db.Games.Include(game => game.Reviews).ThenInclude(game => game.UserLibrary).ThenInclude(library => library.User).Where(game => game.OverallScore != 0).OrderByDescending(game => game.OverallScore).Take(10).ToListAsync();     //"Where" statement takes out of ALL games that ONLY HAVE anonymous reviews!
                 var topGamesReviews = new List<GetPublicGameReviewsDTO>();
 
                 foreach (var game in topGames)
                 {
-                    var gameReviews = game.Reviews.Where(x=> !x.isAnonymousReview).ToList();
+                    var gameReviews = game.Reviews.Where(reviews=> !reviews.isAnonymousReview).ToList();
                     var reviewsDTO = MapPublicGameReviews(game, gameReviews);
-                    reviewsDTO.GameReviews = reviewsDTO.GameReviews.OrderByDescending(x => x.LastUpdate).Take(5).ToList();
+                    reviewsDTO.GameReviews = reviewsDTO.GameReviews.OrderByDescending(reviews => reviews.LastUpdate).Take(5).ToList();
                     topGamesReviews.Add(reviewsDTO);
                 }
 
@@ -87,7 +87,7 @@ namespace MyGameTrackr.Services
         public void AddGameToDb(int APIGameId, string gameName)
         {
 
-            var game =  db.Games.FirstOrDefault(x=> x.APIGameId == APIGameId);
+            var game =  db.Games.FirstOrDefault(game => game.APIGameId == APIGameId);
             if (game == null)
             {
                 var newGame = new Game_Model
@@ -106,7 +106,7 @@ namespace MyGameTrackr.Services
 
         public void ProcessOverallScore(Game_Model game)
         {
-            var PublicReviews = db.GameReviews.Where(x=> x.Game_ModelId == game.Id && !x.isAnonymousReview && x.CurrentState != GameState.Wishlist).ToList();
+            var PublicReviews = db.GameReviews.Where(reviews=> reviews.Game_ModelId == game.Id && !reviews.isAnonymousReview && reviews.CurrentState != GameState.Wishlist).ToList();
 
             if (PublicReviews.Count == 0)
             {
@@ -114,7 +114,7 @@ namespace MyGameTrackr.Services
             }
             else
             {
-                game.OverallScore = (float)PublicReviews.Average(x => x.Score);
+                game.OverallScore = (float)PublicReviews.Average(review => review.Score);
             }
             db.SaveChanges();
 

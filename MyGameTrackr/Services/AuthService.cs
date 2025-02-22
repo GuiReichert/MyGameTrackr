@@ -49,7 +49,7 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<string>();
             try
             {
-                var user = await db.Users.FirstOrDefaultAsync(x => x.Username.ToLower() == Username.ToLower());
+                var user = await db.Users.FirstOrDefaultAsync(user => user.Username.ToLower() == Username.ToLower());
                 if(user == null  || !VerifyPasswordHash(Password, user.PasswordHash, user.PasswordSalt))
                 {
                     throw new Exception("Username or Password is incorrect");
@@ -70,7 +70,7 @@ namespace MyGameTrackr.Services
 
         public async Task<bool> UserExists(string username)
         {
-            if (await db.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower())) return true;
+            if (await db.Users.AnyAsync(user => user.Username.ToLower() == username.ToLower())) return true;
             else return false;
         }
 

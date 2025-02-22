@@ -23,11 +23,11 @@ namespace MyGameTrackr.Controllers
         {
             var response = await _authService.Register(Username,Password);
 
-            if (response.Success)
+            if (!response.Success)
             {
-                return Ok(response);
+                return BadRequest(response);
             }
-            return BadRequest(response);
+            return Ok(response);
         }
 
 
@@ -36,11 +36,11 @@ namespace MyGameTrackr.Controllers
         {
             var response = await _authService.Login(username, password);
 
-            if (response.Success)
+            if (!response.Success)
             {
-                return Ok(response);
+                return BadRequest(response);
             }
-            return BadRequest(response);
+            return Ok(response);
         }
 
 

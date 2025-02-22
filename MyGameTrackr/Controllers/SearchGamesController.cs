@@ -21,22 +21,22 @@ namespace MyGameTrackr.Controllers
         public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsById(int id)
         {
             var response = await _searchgames.FindGameById(id);
-            if (response.Success)
+            if (!response.Success)
             {
-                return Ok(response);
+                return BadRequest(response);
             }
-            return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpGet("details/name/{game_name}")]
         public async Task<ActionResult<ServiceResponse<GetAPIGameDetailDTO>>> GetDetailsByName(string game_name)
         {
             var response = await _searchgames.FindGameByName(game_name);
-            if (response.Success)
+            if (!response.Success)
             {
-                return Ok(response);
+                return BadRequest(response);
             }
-            return BadRequest(response);
+            return Ok(response);
 
         }
 

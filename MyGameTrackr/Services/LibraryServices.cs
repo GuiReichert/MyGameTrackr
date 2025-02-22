@@ -29,7 +29,7 @@ namespace MyGameTrackr.Services
 
             try
             {
-                var userLibrary = await db.UserLibraries.Include(x => x.GamesReviews).ThenInclude(x=> x.Game_Model).FirstOrDefaultAsync(x=> x.User_ModelId == userId);
+                var userLibrary = await db.UserLibraries.Include(library => library.GamesReviews).ThenInclude(library=> library.Game_Model).FirstOrDefaultAsync(library=> library.User_ModelId == userId);
                 var SearchAPI = await _gameSearch.FindGameById(request.APIGameId);
                 if (!SearchAPI.Success)
                 {
@@ -38,7 +38,7 @@ namespace MyGameTrackr.Services
                 _gameService.AddGameToDb(request.APIGameId, SearchAPI.Data!.Name);
 
 
-                if (await db.GameReviews.FirstOrDefaultAsync(x => x.Game_Model.APIGameId == request.APIGameId && x.UserLibrary == userLibrary) != null)
+                if (await db.GameReviews.FirstOrDefaultAsync(review => review.Game_Model.APIGameId == request.APIGameId && review.UserLibrary == userLibrary) != null)
                 {
                     throw new Exception("You already added this game to your library.");
                 }
@@ -53,7 +53,7 @@ namespace MyGameTrackr.Services
 
 
 
-                var game = await db.Games.FirstOrDefaultAsync(x=> x.APIGameId == request.APIGameId);
+                var game = await db.Games.FirstOrDefaultAsync(game => game.APIGameId == request.APIGameId);
                 var newReview = new GameReview_Model
                 {
                     Game_Model = game!,
@@ -98,7 +98,7 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
             try
             {
-                var game = await db.GameReviews.Include(x => x.UserLibrary).Include(x => x.Game_Model).FirstOrDefaultAsync(x => x.UserLibrary.User_ModelId == userId && x.Game_Model.APIGameId == APIGameId);
+                var game = await db.GameReviews.Include(review => review.UserLibrary).Include(review => review.Game_Model).FirstOrDefaultAsync(review => review.UserLibrary.User_ModelId == userId && review.Game_Model.APIGameId == APIGameId);
                 if (game == null)
                 {
                     throw new Exception("This game is not in your library yet.");
@@ -127,7 +127,7 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
             try
             {
-                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(x=> x.LastUpdate).ToList();
+                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(review => review.LastUpdate).ToList();
             }
             catch (Exception ex)
             {
@@ -142,7 +142,7 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<List<GetLibraryGameReviewDTO>>();
             try
             {
-                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(x => x.Score).Take(5).ToList();
+                response.Data = Map_List_GameReviewDTO(userId).OrderByDescending(review => review.Score).Take(5).ToList();
             }
             catch (Exception ex)
             {
@@ -157,7 +157,7 @@ namespace MyGameTrackr.Services
             var response = new ServiceResponse<GetLibraryGameReviewDTO>();
             try
             {
-                var reviewToChange = await db.GameReviews.Include(x => x.Game_Model).FirstOrDefaultAsync(x => x.Game_Model.APIGameId == request.APIGameId && x.UserLibrary.User_ModelId == userId);
+                var reviewToChange = await db.GameReviews.Include(review => review.Game_Model).FirstOrDefaultAsync(review => review.Game_Model.APIGameId == request.APIGameId && review.UserLibrary.User_ModelId == userId);
                 if (reviewToChange == null)
                 {
                     throw new Exception("This game is not in your library yet.");
@@ -203,7 +203,7 @@ namespace MyGameTrackr.Services
 
         private  List<GetLibraryGameReviewDTO> Map_List_GameReviewDTO(int userId)
         {
-            var userReviews = db.GameReviews.Include(x => x.Game_Model).Where(x => x.UserLibrary.User_ModelId == userId).ToList();
+            var userReviews = db.GameReviews.Include(review => review.Game_Model).Where(review => review.UserLibrary.User_ModelId == userId).ToList();
             var userReviewsDTO = new List<GetLibraryGameReviewDTO>();
 
             foreach (var userReview in userReviews)
